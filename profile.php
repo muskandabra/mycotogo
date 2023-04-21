@@ -125,7 +125,6 @@ $edit 			= 	0;
 
 
 if(isset($_POST['actionprocess']) && $_POST['actionprocess']=='changepassword_do')
-
 {
 
 	$objUser = new User();
@@ -147,18 +146,14 @@ if(isset($_POST['actionprocess']) && $_POST['actionprocess']=='changepassword_do
 		print "<script>window.location='profile.php?err=PasswordError#tab_1_3'</script>";
 
 	}
+	
 
 }
 
 
 
 if(isset($_POST['actionprocess']) && $_POST['actionprocess']=='editusers_do')
-
 {
-
-
-
-	
 
 	if(trim($_POST['firstname'])!='' && $_POST['lastname']!='' && $_POST['useremail']!='' && $_POST['contactno']!='' )
 
@@ -617,37 +612,35 @@ else
 
   									
 
-									
+								    <div class="control-group">
 
-										<div class="control-group">
+										<label class="control-label">New Password<span class="required">*</span></label>
 
-													<label class="control-label">New Password<span class="required">*</span></label>
+										<div class="controls">
 
-													<div class="controls">
+											<input type="password" class="span6 m-wrap" name="newpassword" id="newpassword"/>
+											<a class = "showHidePassword" href=""><i class="fa fa-eye-slash" aria-hidden="true"></i> </a>
 
-														<input type="password" class="span6 m-wrap" name="newpassword" id="newpassword"/>
-														<a class = "showHidePassword" href=""><i class="fa fa-eye-slash" aria-hidden="true"></i> </a>
+											<span class="help-inline">Enter your password</span>
 
-														<span class="help-inline">Enter your password</span>
+										</div>
 
-													</div>
+									</div>
 
-												</div>
+									<div class="control-group">
 
-												<div class="control-group">
+										<label class="control-label">Confirm Password<span class="required">*</span></label>
 
-													<label class="control-label">Confirm Password<span class="required">*</span></label>
+										<div class="controls">
 
-													<div class="controls">
+											<input type="password" class="span6 m-wrap" name="confirmpassword"/>
+											<a class = "showHidePassword" href=""><i class="fa fa-eye-slash" aria-hidden="true"></i> </a>
 
-														<input type="password" class="span6 m-wrap" name="confirmpassword"/>
-														<a class = "showHidePassword" href=""><i class="fa fa-eye-slash" aria-hidden="true"></i> </a>
+											<span class="help-inline">Confirm your password</span>
 
-														<span class="help-inline">Confirm your password</span>
+										</div>
 
-													</div>
-
-												</div>
+									</div>
 
                                     
 

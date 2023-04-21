@@ -165,6 +165,7 @@ include_once(PATH."classes/User.php");
 									</div>
 
 								</div>
+		
 
 								<table class="table table-striped table-hover table-bordered" id="sample_editable_1">
 

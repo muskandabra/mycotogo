@@ -397,38 +397,27 @@ if (isset($_POST['actionprocess']) && $_POST['actionprocess'] == "login_do") {
 }
 
 
-if(isset($_POST['actionprocess']) && $_POST['actionprocess']=="forgetpassword_do")
+if (isset($_POST['actionprocess']) && $_POST['actionprocess']  == "forgetpassword_do") {
 
-{ 
-
-	if(isset($_POST['email']) && isset($_POST['email']) !="")
-
-	{
+	if (isset($_POST['email']) && isset($_POST['email']) != "") {
 
 		$objUser->useremail = $_POST['email'];
 
-		$objUser->group_id = 2; // 2 for Item Writer
+		$token=$objUser->getToken($_POST['email']);
 
-		if ($objUser->resetPassword()==1)
+		if ($token != "") {
 
-		{
+		    print "<script>window.location='resetpassword.php?token_id=".$token."'</script>";
 
-			print "<script>window.location='index.php?msg=succ'</script>";
+		} else {
 
-		}
-
-		else
-
-		{
-
-			print "<script>window.location='index.php?msg=EMDNE'</script>";
+			print "<script>window.location='resetpassword.php?token_id=Error'</script>";
 
 		}
 
 	}
 
 }
-
 
 ?>
 

@@ -14,8 +14,6 @@ include_once("classes/User.php");
 
 <!-- BEGIN HEAD -->
 
-
-
 <head>
 
 	<meta charset="utf-8" />
@@ -60,52 +58,74 @@ include_once("classes/User.php");
 
 	<link rel="shortcut icon" href="favicon.ico" />
     <style>
-        .login .content .forget-form {
-     display: block; 
-}
-.login .content .m-wrap {
-  
- 
-    border-left: 1px solid #e5e5e5 !important;
-}
+     .login .content .forget-form {
+      display: block; 
+     }
+      .login .content .m-wrap {
+      border-left: 1px solid #e5e5e5 !important;
+     }
     </style>
 
 </head>
 
 <!-- END HEAD -->
+
 <?php
 
+$response = '';
 
-
-if(isset($_POST['actionprocess']) && $_POST['actionprocess']=='changepassword_do')
-
-{
-
-	$objUser = new User();
-
-	$objUser->user_id=$_SESSION['sessuserid'];
-
-	$objUser->password=$_POST['newpassword'];
-
-	$objUser->confirmPassword=$_POST['confirmpassword'];
-
-    //echo $objUser->user_id. " " .$objUser->password. " " .$objUser->confirmPassword;
-
-	// $returnVal = $objUser->changePassword1();
-
-	// if($returnVal == 0)
-
-	// {
-
-	// 	$errMessage='Password Mismatch';
-
-	// 	print "<script>window.location='index.php?err=PasswordError'</script>";
-
-	// }
-
+if (isset($_GET['token_id'])) {
+		
+	$token = $_GET['token_id'];
+		
+	//echo $token;
+		
 }
 
+$objUser = new User();
 
+    $useremail=$objUser->checktoken($token);
+
+	//$expireddate=$objUser->checkexpiretoken($token);
+
+	//echo $expireddate;
+
+   // echo $useremail;
+
+	if($useremail == ""){
+
+	$response = ' <center> <h1 style="color:white;position:relative;top:300px"> Invalid Token </h1> </center> ';
+
+    echo $response;
+
+	exit;
+
+	}
+	else{
+
+	$response = ' <center> <h4 style="position:relative;COLOR:GREEN;top:150px"> Valid Token </h4> </center> ';
+
+	echo $response;
+
+	}
+
+if(isset($_POST['actionprocess']) && $_POST['actionprocess']=='changepassword_do')
+{
+	
+	$objUser->confirmPassword = $_POST['confirmpassword'];
+
+	$returnVal = $objUser->changePasswordToken($token);
+
+	if($returnVal != 0 )
+	{
+		$response = '<center><h1 style="color:white;position:relative;top:300px">Successfully Reset Password</h1></center>';
+
+        echo $response;
+
+        exit;
+	}
+
+}
 
 
 ?>
@@ -126,48 +146,39 @@ if(isset($_POST['actionprocess']) && $_POST['actionprocess']=='changepassword_do
 
 
 
-	<div class="content">
+	<div class="content">  
 
-	
-
-	   
 
 		<!-- BEGIN FORGOT PASSWORD FORM -->
 
 
-			<!--input type="hidden" name="actionprocess" id="actionprocess" value="forgetpassword_do"-->
-
-			<h3 class="">Forget Password ?</h3>
+			<h3 class="">Create New Password</h3>
 
             <div class="portlet-body form">
 
 								<!-- BEGIN FORM-->
 
-								<form action="" class="form-vertical forget-form" id="frmChangePassword" name="frmChangePassword" method="post" class="form-horizontal">
+			<form action="" class="form-vertical forget-form" id="formvalidation" name="formvalidation" method="post" class="form-horizontal">
+			
+			<div class="alert alert-error hide" 
 
-									<input type="hidden" name="user_id" id="user_id" value="<?php echo ($user_id!=0?$user_id:'0');?>">
+            <?php
 
-									<input type="hidden" name="actionprocess" id="actionprocess" value="changepassword_do">
+	     if ($response=='[Invalid Data]')
 
-									<div class="alert alert-error hide" 
+	     echo('style="display: block;"');
 
-									<?php
+         ?>>
 
-										if ($errMessage=='Password Mismatch')
+	     <button style="float: right;" class="close" data-dismiss="alert"></button>
 
-											echo('style="display: block;">');
+	      Unsuccessful to reset Password
 
-									?>>
+	     <?php echo $response;?>
 
-										<button style="float:right;" class="close" data-dismiss="alert"></button>
+         </div>
 
-										You have some form errors. Please check below.
-
-										<?php echo $errMessage;?>
-
-									</div>
-
-									
+			<input type="hidden" name="actionprocess" id="actionprocess" value="changepassword_do">
 
 										<div class="control-group">
 
@@ -190,7 +201,7 @@ if(isset($_POST['actionprocess']) && $_POST['actionprocess']=='changepassword_do
 
 													<div class="controls">
 
-														<input type="password" class="span6 m-wrap" name="confirmpassword"/>
+														<input type="password" class="span6 m-wrap" name="confirmpassword" id="confirmpassword"/>
 														<a class = "showHidePassword" href=""><i class="fa fa-eye-slash" aria-hidden="true"></i> </a>
 
 														<span class="help-inline">Confirm your password</span>
@@ -209,41 +220,21 @@ if(isset($_POST['actionprocess']) && $_POST['actionprocess']=='changepassword_do
 
 									</div>
 
-                                    <div class="row-fluid">
-
-                                                                            
+                                    <div class="row-fluid">                                           
 
                                     </div>
 
                                  </div>
 
-
-
-
-                                
 								</form>
 
 								<!-- END FORM-->
 
-
-                               
-
-
 							</div>
-
-			
-
-            
-
-		
 
 		<!-- END FORGOT PASSWORD FORM -->
 
-	
-
 	</div>
-
-	
 
 	<!-- BEGIN COPYRIGHT -->
 
@@ -312,7 +303,7 @@ if(isset($_POST['actionprocess']) && $_POST['actionprocess']=='changepassword_do
 
 	<script src="assets/scripts/login-soft.js" type="text/javascript"></script>    
     
-    <script src="assets/scripts/form-validation.js"></script> 
+    <!--script src="assets/scripts/form-validation.js"></script--> 
 
     <script>
 
@@ -349,10 +340,126 @@ if(isset($_POST['actionprocess']) && $_POST['actionprocess']=='changepassword_do
 
 
 
+		
+
+var FormValidation = function () {
+
+return {
+
+	//main function to initiate the module
+
+	init: function () {
+
+
+		var formCP = $('#formvalidation');
+
+		var errorCP = $('.alert-error', formCP);
+
+		var successCP = $('.alert-success', formCP);
+
+
+		formCP.validate({
+
+			errorElement: 'span', //default input error message container
+
+			errorClass: 'help-inline', // default input error message class
+
+			focusInvalid: false, // do not focus the last invalid input
+
+			ignore: "",
+
+			rules: {
+
+				password: {
+
+					minlength: 5,
+
+					required: true
+
+				},
+
+				newpassword: {
+
+					minlength: 8,
+
+					required: true
+
+				},
+
+				confirmpassword: {
+
+					minlength: 8,
+
+					required: true,
+
+					equalTo: "#newpassword"
+
+				}
+
+			},
+
+
+			invalidHandler: function (event, validator) { //display error alert on form submit              
+
+				successCP.hide();
+
+				errorCP.show();
+
+				App.scrollTo(errorCP, -200);
+
+			},
+
+			highlight: function (element) { // hightlight error inputs
+
+				$(element)
+
+					.closest('.help-inline').removeClass('ok'); // display OK icon
+
+				$(element)
+
+					.closest('.control-group').removeClass('success').addClass('error'); // set error class to the control group
+
+			},
+
+			unhighlight: function (element) { // revert the change dony by hightlight
+
+				$(element)
+
+					.closest('.control-group').removeClass('error'); // set error class to the control group
+
+			},
+
+			success: function (label) {
+
+				label
+
+					.addClass('valid').addClass('help-inline ok') // mark the current input as valid and display OK icon
+
+				.closest('.control-group').removeClass('error').addClass('success'); // set success class to the control group
+
+			},
+
+			submitHandler: function (form) {
+
+				successCP.show();
+
+				errorCP.hide();
+
+				form.submit();
+
+			}
+
+		});
+
+	}
+
+};
+
+
+}();
+
 
 </script>
-
-
 
 </body>
 

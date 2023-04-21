@@ -282,7 +282,7 @@ include_once(PATH."private/settings.php");
 					</li>
 
 					
-<li <?php if($frontPageName=="" || $frontPageName=="templates.php" ){?> class="start active"  <?php } ?> >
+                     <li <?php if($frontPageName=="" || $frontPageName=="templates.php" ){?> class="start active"  <?php } ?> >
 
 						<a href="templates.php">
 

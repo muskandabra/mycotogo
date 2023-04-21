@@ -318,9 +318,7 @@ if (($_POST['task']) == 'searchmember')
 			echo json_encode($rowMember);
 			exit;
 		}
-		//$rowMember=mysqli_fetch_array($SharesMember);
-	
-														
+		//$rowMember=mysqli_fetch_array($SharesMember);												
 	}
 	exit;
 }
